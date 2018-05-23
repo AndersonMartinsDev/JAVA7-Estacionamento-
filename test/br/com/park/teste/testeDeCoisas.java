@@ -130,8 +130,10 @@ public class testeDeCoisas {
          
          // Metodo para Mostrar o status 
          if(ns < 0){
+             cx.setCobrar(true);
              System.err.println("Tempo Excedido");
          }else{
+             cx.setCobrar(false);
              System.out.println("Liberado → "+ns+" minutos");
          }
          

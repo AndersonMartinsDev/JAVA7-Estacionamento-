@@ -69,7 +69,7 @@ public class Caixa {
         tb = new TabelaPreco();
         
         tb.getMoeda();
-        
+        //Teste
         Caixa cx = new Caixa();
         
         cx.setCobrar(true);
