@@ -5,6 +5,8 @@
  */
 package br.com.park.job;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -65,16 +67,26 @@ public class Caixa {
         this.valor = valor;
     }
 
-    public void gerarReceita(Ticket tk) {
-        tb = new TabelaPreco();
-        
-        tb.getMoeda();
-        //Teste
-        Caixa cx = new Caixa();
-        
-        cx.setCobrar(true);
-        cx.setValor(0);
-        
+    public void gerarReceita(boolean cobrar, Ticket ticket) {
+        if (cobrar) {
+            Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
+            Instant d1 = ticket.getSaida().toInstant();
+            Instant d3 = c.getTime().toInstant();
+
+            int ns = (int)Duration.between(d3, d1).toMinutes();
+
+            // Metodo para Mostrar o status 
+            if (ns < 0) {
+              
+                System.err.println("Tempo Excedido");
+            } else {
+              
+                System.out.println("Liberado → " + ns + " minutos");
+            }
+        } else {
+
+        }
+
     }
 
 }

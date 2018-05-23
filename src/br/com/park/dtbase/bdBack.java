@@ -55,11 +55,8 @@ public class bdBack {
                 passe = bdTicket.get(i).getId();
             }
         }
-        
-        
-        
-        Caixa cx = new Caixa();
-        cx.gerarReceita(bdTicket.get(passe));
+
+      
         return bdTicket.get(passe).toString();
         
     }
