@@ -116,7 +116,7 @@ public class testeDeCoisas {
          Ticket passe = new Ticket();
          passe.setCodigo(105202);
          
-         passe.setaHora(20, 00, 00);
+         passe.setaHora(19, 00, 00);
          passe.setaHoraSaida(40);
          
          Instant d1 = passe.getSaida().toInstant();
@@ -130,10 +130,11 @@ public class testeDeCoisas {
          
          // Metodo para Mostrar o status 
          if(ns < 0){
-             cx.setCobrar(true);
+             
              System.err.println("Tempo Excedido");
+             System.err.println("Passou "+-ns+" Minutos");
          }else{
-             cx.setCobrar(false);
+             
              System.out.println("Liberado → "+ns+" minutos");
          }
          

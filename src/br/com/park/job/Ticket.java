@@ -21,12 +21,21 @@ public class Ticket {
     private Date entrada;
     private Date saida;
     private String status;
+    private float valor;
     private Servicos serv;
     // Observar se é necessario criar apenas uma instancia do calendário aqui. 
 
     public Ticket() {
         this.id = inc++;
         setId(id);
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
     }
 
     public Date getEntrada() {

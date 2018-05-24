@@ -63,13 +63,7 @@ public class bdBack {
     public void salvaLog(Logs log){
         bdlog.add(log);
     }
-    
-    
-    
-    
-    
-    
-    
+ 
     public static ArrayList<Logs> getBdlog() {
         return bdlog;
     }

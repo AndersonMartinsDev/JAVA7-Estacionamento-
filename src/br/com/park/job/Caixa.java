@@ -5,6 +5,7 @@
  */
 package br.com.park.job;
 
+import br.com.park.dtbase.bdBack;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
@@ -17,10 +18,8 @@ public class Caixa {
     private static int inc = 1;
     private Integer id;
     private String convenioNome;
-    private boolean cobrar;
-    private float valor;
     private float desconto;
-    private TabelaPreco tb;
+    private bdBack banco;
 
     public Caixa() {
         this.id = inc++;
@@ -51,42 +50,24 @@ public class Caixa {
         this.desconto = desconto;
     }
 
-    public boolean isCobrar() {
-        return cobrar;
-    }
-
-    public void setCobrar(boolean cobrar) {
-        this.cobrar = cobrar;
-    }
-
-    public float getValor() {
-        return valor;
-    }
-
-    public void setValor(float valor) {
-        this.valor = valor;
-    }
-
-    public void gerarReceita(boolean cobrar, Ticket ticket) {
-        if (cobrar) {
-            Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
-            Instant d1 = ticket.getSaida().toInstant();
-            Instant d3 = c.getTime().toInstant();
-
-            int ns = (int)Duration.between(d3, d1).toMinutes();
-
-            // Metodo para Mostrar o status 
-            if (ns < 0) {
-              
-                System.err.println("Tempo Excedido");
-            } else {
-              
-                System.out.println("Liberado → " + ns + " minutos");
+    public float gerarReceita(Ticket ticket) {
+        float receita = 0;
+        Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
+        Instant d1 = ticket.getSaida().toInstant();
+        Instant d3 = c.getTime().toInstant();
+        int ns = (int) Duration.between(d3, d1).toMinutes();
+        // Metodo para Mostrar o status 
+        
+        for (int i = 0; i < banco.getBdTabPreco().size(); i++) {
+            if (-ns >= banco.getBdTabPreco().get(i).getTempo()) {
+                receita = banco.getBdTabPreco().get(i).getMoeda();
+                /*Deve-se pegar o ticket e atualizar o valor de acordo com o tempo
+                setando no setValor() do ticket. isso será setado no retorno
+                
+                */
             }
-        } else {
-
         }
-
+        return receita;
     }
 
 }
