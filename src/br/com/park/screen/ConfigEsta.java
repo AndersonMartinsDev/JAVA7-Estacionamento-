@@ -5,6 +5,8 @@
  */
 package br.com.park.screen;
 
+import br.com.park.dtbase.ServicoDAO;
+import br.com.park.dtbase.TBdao;
 import br.com.park.dtbase.bdBack;
 import br.com.park.job.Caixa;
 import br.com.park.job.Estacionamento;
@@ -12,52 +14,71 @@ import br.com.park.job.Servicos;
 import br.com.park.job.TabelaPreco;
 import br.com.park.logs.Logs;
 import br.com.park.tools.MinhaTabela;
+import java.awt.Choice;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-
 
 public class ConfigEsta extends javax.swing.JPanel {
 
-    
-    private  Estacionamento park;
+    private Estacionamento park;
     private Servicos servico;
+    private final ServicoDAO bancoServico = new ServicoDAO();
     private bdBack banco;
     private Logs lg;
+    TBdao bancoDAO = new TBdao();
 
     public ConfigEsta() {
         initComponents();
-        carregaTabServico();
-        carregaTabTBPreco();
-        abas_parametros.setEnabledAt(1, false);
+        initMethods();
+        try {
+            bancoDAO.bdtoArray();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfigEsta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    public void printLog(String modulo,String txt){
-            lg = new Logs();
-            lg.setDescricao(txt);
-            lg.setModulo(modulo);
-            banco.salvaLog(lg);
-        
+
+    public void printLog(String modulo, String txt) {
+        lg = new Logs();
+        lg.setDescricao(txt);
+        lg.setModulo(modulo);
+
     }
+
+    public void ppCb() {
+        cb_unidadeServico.add("");
+        cb_unidadeServico.add("Minuto");
+        cb_unidadeServico.add("Hora");
+        cb_unidadeServico.add("Dia");
+        cb_unidadeServico.add("Mês");
+        cb_unidadeServico.add("Ano");
+
+    }
+
+   
+
     public void carregaTabServico() {
+
         ArrayList dados = new ArrayList();
-        banco = new bdBack();
         dados.clear();
-        String[] colunas = new String[]{"", "ID", "Nome", "Tempo","Unidade"};
-        
+        String[] colunas = new String[]{"", "ID", "Nome", "Tempo", "Unidade"};
+
         // Tem que preencher o arraylist do banco com o Servico e trocar aqui para o Array certo
         try {
-            for (int i = 0; i < banco.getBdServico().size(); i++) {
-                int id = banco.getBdServico().get(i).getId();
-                String nome = banco.getBdServico().get(i).getNome();
-                int tole = banco.getBdServico().get(i).getTolerancia();
-                String uni = banco.getBdServico().get(i).getUnidadeMedida();
-                dados.add(new Object[]{"x", id, nome, tole,uni});
-
+            for (Servicos s : bancoServico.writeService()) {
+                int id = s.getId();
+                String nome = s.getNome();
+                int tempo = s.getTolerancia();
+                String unMedida = s.getUnidadeMedida();
+                dados.add(new Object[]{"", id, nome, tempo, unMedida});
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro Ao preencher" + e);
         }
@@ -75,20 +96,26 @@ public class ConfigEsta extends javax.swing.JPanel {
         tb_servico1.setAutoResizeMode(tb_servico1.AUTO_RESIZE_OFF);
         tb_servico1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    public void carregaTabTBPreco(){
-        banco = new bdBack();
+
+    public void carregaTabTBPreco() {
+        
         ArrayList dados1 = new ArrayList();
         dados1.clear();
-        String[] colunas = new String[]{"", "ID", "Nome", "Tempo","Valor R$"};
-        
+        try {
+            bancoDAO.bdtoArray();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfigEsta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] colunas = new String[]{"", "ID", "Nome", "Tempo", "Valor R$"};
+
         // Tem que preencher o arraylist do banco com o Servico e trocar aqui para o Array certo
         try {
-            for (int i = 0; i < banco.getBdTabPreco().size(); i++) {
-                int id = banco.getBdTabPreco().get(i).getId();
-                String nome =String.valueOf(banco.getBdTabPreco().get(i).getId()+1+" ª Hora");
-                double tole = banco.getBdTabPreco().get(i).getTempo();
-                double uni = banco.getBdTabPreco().get(i).getMoeda();
-                dados1.add(new Object[]{"x", id, nome, tole,uni});
+            for (TabelaPreco tb : bancoDAO.bdtoArray()) {
+                int id = tb.getId();
+                String nome = String.valueOf(tb.getId() + 1 + " ª Hora");
+                double tole = tb.getTempo();
+                double uni = tb.getMoeda();
+                dados1.add(new Object[]{"x", id, nome, tole, uni});
 
             }
         } catch (Exception e) {
@@ -146,13 +173,24 @@ public class ConfigEsta extends javax.swing.JPanel {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
+    private void initMethods() {
+        ppCb();
+        carregaTabServico();
+        carregaTabTBPreco();
+        abas_parametros.setEnabledAt(1, false);
+        try {
+            bancoServico.writeService();
+        } catch (Exception e) {
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         abas_parametros = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        pn_serv = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -160,8 +198,8 @@ public class ConfigEsta extends javax.swing.JPanel {
         tf_tolerancia = new javax.swing.JTextField();
         btn_salvar = new javax.swing.JButton();
         btn_cancelarServico = new javax.swing.JButton();
-        cb_unidadeServico = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        cb_unidadeServico = new java.awt.Choice();
         jScrollPane1 = new javax.swing.JScrollPane();
         tb_tbPreco = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
@@ -189,10 +227,10 @@ public class ConfigEsta extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tb_convenio = new javax.swing.JTable();
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.addFocusListener(new java.awt.event.FocusAdapter() {
+        pn_serv.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pn_serv.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jPanel4FocusLost(evt);
+                pn_servFocusLost(evt);
             }
         });
 
@@ -242,60 +280,62 @@ public class ConfigEsta extends javax.swing.JPanel {
             }
         });
 
-        cb_unidadeServico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Minuto", "Hora", "Dia", "Mês", "Ano" }));
-
         jLabel8.setText("Un:");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        cb_unidadeServico.setName(""); // NOI18N
+
+        javax.swing.GroupLayout pn_servLayout = new javax.swing.GroupLayout(pn_serv);
+        pn_serv.setLayout(pn_servLayout);
+        pn_servLayout.setHorizontalGroup(
+            pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pn_servLayout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(jLabel1)
                 .addContainerGap(151, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(pn_servLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pn_servLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tf_nomeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pn_servLayout.createSequentialGroup()
+                        .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btn_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGroup(pn_servLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tf_tolerancia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_cancelarServico)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGroup(pn_servLayout.createSequentialGroup()
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cb_unidadeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(cb_unidadeServico, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        pn_servLayout.setVerticalGroup(
+            pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pn_servLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(tf_nomeServico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tf_tolerancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_unidadeServico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_salvar)
-                    .addComponent(btn_cancelarServico))
+                .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pn_servLayout.createSequentialGroup()
+                        .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tf_tolerancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(pn_servLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_salvar)
+                            .addComponent(btn_cancelarServico)))
+                    .addComponent(cb_unidadeServico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -468,7 +508,7 @@ public class ConfigEsta extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pn_serv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -482,7 +522,7 @@ public class ConfigEsta extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pn_serv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -668,25 +708,26 @@ public class ConfigEsta extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salvarActionPerformed
-            lg = new Logs();
+        lg = new Logs();
         try {
             String nome = tf_nomeServico.getText();
             int tolerancia = Integer.valueOf(tf_tolerancia.getText());
             String unidade = String.valueOf(cb_unidadeServico.getSelectedItem());
-   
             servico = new Servicos();
             servico.setNome(nome);
             servico.setTolerancia(tolerancia);
             servico.setUnidadeMedida(unidade);
-            banco.salvaServico(servico);
+            bancoServico.salvaServico(servico);
             carregaTabServico();
             setTxtShow("Título do Serviço", tf_nomeServico);
             setTxtShow("Tempo de Tolerancia", tf_tolerancia);
             printLog("Serviço", "Novo serviço criado");
+            JOptionPane.showMessageDialog(js_tempo, "Serviço Criado!");
+
         } catch (Error ex) {
-            printLog("Serviço","Não foi possivel Gerar novo Serviço");
+            printLog("Serviço", "Não foi possivel Gerar novo Serviço");
         }
-        
+
         //IMplementar metodo para salvar no banco de dados
     }//GEN-LAST:event_btn_salvarActionPerformed
 
@@ -724,10 +765,10 @@ public class ConfigEsta extends javax.swing.JPanel {
         validTxtShow("Tempo em minutos", tf_DescontoConvenio);
     }//GEN-LAST:event_tf_DescontoConvenioFocusLost
 
-    private void jPanel4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPanel4FocusLost
+    private void pn_servFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pn_servFocusLost
         // TODO add your handling code here:
         tf_nomeServico.setText("Tempo de tolerancia");
-    }//GEN-LAST:event_jPanel4FocusLost
+    }//GEN-LAST:event_pn_servFocusLost
 
     private void btn_cancelarServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarServicoActionPerformed
         setTxtShow("Título do Serviço", tf_nomeServico);
@@ -735,20 +776,24 @@ public class ConfigEsta extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_cancelarServicoActionPerformed
 
     private void btn_salvarTPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salvarTPActionPerformed
-       
+
         TabelaPreco tb = new TabelaPreco();
         banco = new bdBack();
         Double tempo = Double.valueOf(js_tempo.getValue().toString());
         float valor = Float.parseFloat(tf_valor.getText());
         tb.setMoeda(valor);
         tb.setTempo(tempo);
-        banco.salvaTbPreco(tb);
-  
+        try {
+            bancoDAO.create(tb);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfigEsta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         /*-- AQUI TERÁ que ser MUDADO para da a opção de Fazer o Convenio Especial
         Caso seja habilitado.
-        */
+         */
         Caixa convenio = new Caixa();
-        convenio.setConvenioNome(convenio.getId()+"ª Hora");
+        convenio.setConvenioNome(convenio.getId() + "ª Hora");
         convenio.setDesconto(Integer.valueOf(tf_valor.getText()));
         // pode ser feita uma intervenção por aqui  
         banco.salvaConvenio(convenio);
@@ -779,7 +824,7 @@ public class ConfigEsta extends javax.swing.JPanel {
     private javax.swing.JButton btn_salvar;
     private javax.swing.JButton btn_salvarConvenio;
     private javax.swing.JButton btn_salvarTP;
-    private javax.swing.JComboBox<String> cb_unidadeServico;
+    private java.awt.Choice cb_unidadeServico;
     private java.awt.Checkbox check_ConvenioSp;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -792,7 +837,6 @@ public class ConfigEsta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -802,6 +846,7 @@ public class ConfigEsta extends javax.swing.JPanel {
     private java.awt.Label label2;
     private java.awt.Label label3;
     private javax.swing.JPanel pn_ConvenioSP;
+    private javax.swing.JPanel pn_serv;
     private javax.swing.JTable tb_convenio;
     private javax.swing.JTable tb_servico1;
     private javax.swing.JTable tb_tbPreco;

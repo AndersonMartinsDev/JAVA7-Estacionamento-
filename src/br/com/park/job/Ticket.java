@@ -1,17 +1,14 @@
 package br.com.park.job;
 
-import java.awt.Choice;
-import java.awt.Label;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.awt.Color;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 
 public class Ticket {
 
@@ -21,12 +18,37 @@ public class Ticket {
     private Date entrada;
     private Date saida;
     private String status;
-    private Servicos serv;
+    private float valor;
+    private String serv;
+    private Caixa cx;
     // Observar se é necessario criar apenas uma instancia do calendário aqui. 
 
     public Ticket() {
-        this.id = inc++;
-        setId(id);
+
+    }
+
+    public String getServ() {
+        return serv;
+    }
+
+    public void setServ(String serv) {
+        this.serv = serv;
+    }
+
+    public Caixa getCx() {
+        return cx;
+    }
+
+    public void setCx(Caixa cx) {
+        this.cx = cx;
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
     }
 
     public Date getEntrada() {
@@ -68,23 +90,31 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+
     //------------------------------------------------------
+    public String buscaStatus(JLabel j1) {
+        
+            Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
+            Instant d1 = getSaida().toInstant();
+            Instant d2 = this.getEntrada().toInstant();
+            Instant d3 = c.getTime().toInstant();
 
-    public String buscaStatus() {
-        String sts;
-        Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
-        Instant d1 = getSaida().toInstant();
-        Instant d3 = c.getTime().toInstant();
+            double ns = (double) Duration.between(d3, d1).toMinutes();
+            double tempoDuracao = (double) Duration.between(d2, d3).toMinutes();
 
-        int ns = (int) Duration.between(d3, d1).toMinutes();
+            if (ns == 0) {
+                j1.setForeground(Color.blue);
+                return "Seu tempo esgotou: " + (int) ns;
+            } else if (true) {
+                //d1.isAfter(d3)
+                j1.setForeground(Color.magenta);
+                return "Liberado → " + (int) ns + " Minutos";
 
-        // Metodo para Mostrar o status 
-        if (ns < 0) {
-           sts = "Tempo Excedido";
-        } else {
-            sts ="Liberado → " + ns + " minutos";   
-        }
-        return sts;
+            } else {
+                j1.setForeground(Color.red);
+                return "Excedeu: " + (int) -ns + " Minutos";
+            }
+       
     }
 
     public int gerarCodigo() {
@@ -94,29 +124,7 @@ public class Ticket {
         return valorAleatorio;
     }
 
-    public void novoTicket(Ticket bilhete) {
-        //Fazer o código ser gerado automaticamente
-        bilhete.setCodigo(gerarCodigo());
-        //Pega hora atual
-        bilhete.setEntrada(setaHoraAtual());
-        //Pega hora da entrada e soma com tolerancia de serviços
-        bilhete.setSaida(saida);
-        //Status também será automatico
-        bilhete.setStatus(status);
-    }
-
-    public String conversorHora() {
-        // Aqui vai retornar um String
-        DateFormat forma = DateFormat.getDateInstance();
-        Calendar c = Calendar.getInstance();
-        Date date = c.getTime();
-        // c.before(horaSaida);
-        return String.valueOf(forma.format(date));
-    }
-
     public Date setaHoraSaida(int tolerancia) {
-
-        //Lembrar de setar dentro dos metodos corretos setSAIDA setENTRADA
         Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
         c.setTime(getEntrada());
         c.add(Calendar.MINUTE, tolerancia);
@@ -137,6 +145,7 @@ public class Ticket {
         setHora.set(Calendar.HOUR_OF_DAY, hora);
         setHora.set(Calendar.MINUTE, minuto);
         setHora.set(Calendar.SECOND, segundo);
+       
         setEntrada(setHora.getTime());
         return setHora.getTime();
     }

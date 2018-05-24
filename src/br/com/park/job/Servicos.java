@@ -1,18 +1,33 @@
 package br.com.park.job;
 
-public class Servicos {
+public final class Servicos {
+
     private static int inc = 0;
     private Integer id;
     private String nome;
-    private int acessos;//Não me lembro porque pus isso aqui lembrar de projetar antes de programar
+    private int acessos;//QUANTIDADE DE ACESSOS POR TICKET
     private Integer tolerancia;
     private String unidadeMedida;
 
     
-     
     public Servicos() {
         this.id = inc++;
         setId(id);
+    }
+    public Servicos(int id,String nome,int acessos,int tolerancia,String unidadeMedida){
+        setId(id);
+        setNome(nome);
+        setAcessos(acessos);
+        setTolerancia(tolerancia);
+        setUnidadeMedida(unidadeMedida);
+    }
+    
+    public int getAcessos() {
+        return acessos;
+    }
+
+    public void setAcessos(int acessos) {
+        this.acessos = acessos;
     }
 
     public String getUnidadeMedida() {
@@ -45,10 +60,6 @@ public class Servicos {
 
     public void setTolerancia(Integer tolerancia) {
         this.tolerancia = tolerancia;
-    }
-
-    public void gerarTicket() {
-
     }
 
 }

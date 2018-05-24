@@ -5,18 +5,19 @@
  */
 package br.com.park.screen;
 
+import br.com.park.dtbase.bdBack;
 import br.com.park.job.Ticket;
 
 /**
  *
  * @author info17
  */
-public class teste extends javax.swing.JPanel {
+public class PrintScreen extends javax.swing.JPanel {
 
     /**
-     * Creates new form teste
+     * Creates new form PrintScreen
      */
-    public teste() {
+    public PrintScreen() {
         initComponents();
     }
 
@@ -29,12 +30,12 @@ public class teste extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        button1 = new java.awt.Button();
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        button1.setLabel("Imprimir");
+        button1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                button1ActionPerformed(evt);
             }
         });
 
@@ -43,26 +44,30 @@ public class teste extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addComponent(jButton1)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addGap(153, 153, 153)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jButton1)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addGap(122, 122, 122)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(144, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       Ticket t1 = new Ticket();
-        System.err.println(t1.getId());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        Ticket t1 = new Ticket();
+        t1.setCodigo(1471);
+        t1.setaHoraAtual();
+        t1.setaHoraSaida(0);
+        bdBack bd = new bdBack();
+        bd.salvaTicket(t1);
+    }//GEN-LAST:event_button1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private java.awt.Button button1;
     // End of variables declaration//GEN-END:variables
 }

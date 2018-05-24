@@ -7,7 +7,18 @@ public class MinhaTabela extends AbstractTableModel {
 
     private ArrayList linhas = null;
     private String[] colunas = null;
-    
+     @Override
+    public boolean isCellEditable(int row, int col) {
+        // Penultima linha, linha anterior a que foi adicionada
+        if(row == colunas.length){
+            return false;
+        }
+        if (col > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     public MinhaTabela (ArrayList lin,String[] col ){
         setLinhas(lin);

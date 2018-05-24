@@ -60,7 +60,7 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                                      <Component id="pn_serv" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jScrollPane3" min="-2" pref="320" max="-2" attributes="0"/>
                                   </Group>
@@ -81,7 +81,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jPanel4" max="32767" attributes="0"/>
+                          <Component id="pn_serv" max="32767" attributes="0"/>
                           <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -102,7 +102,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="jPanel4">
+            <Container class="javax.swing.JPanel" name="pn_serv">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -111,7 +111,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jPanel4FocusLost"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="pn_servFocusLost"/>
               </Events>
 
               <Layout>
@@ -145,7 +145,7 @@
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel8" min="-2" pref="22" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="cb_unidadeServico" min="-2" pref="89" max="-2" attributes="0"/>
+                                          <Component id="cb_unidadeServico" min="-2" pref="90" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -165,16 +165,20 @@
                               <Component id="tf_nomeServico" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="tf_tolerancia" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cb_unidadeServico" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btn_salvar" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btn_cancelarServico" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="tf_tolerancia" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btn_salvar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btn_cancelarServico" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="cb_unidadeServico" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="34" max="32767" attributes="0"/>
                       </Group>
@@ -243,25 +247,14 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelarServicoActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="cb_unidadeServico">
-                  <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="5">
-                        <StringItem index="0" value="Minuto"/>
-                        <StringItem index="1" value="Hora"/>
-                        <StringItem index="2" value="Dia"/>
-                        <StringItem index="3" value="M&#xea;s"/>
-                        <StringItem index="4" value="Ano"/>
-                      </StringArray>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                  </AuxValues>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel8">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Un:"/>
+                  </Properties>
+                </Component>
+                <Component class="java.awt.Choice" name="cb_unidadeServico">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>

@@ -1,34 +1,41 @@
 package br.com.park.dtbase;
 
+import br.com.park.client.Cliente;
 import br.com.park.job.Caixa;
 import br.com.park.job.Estacionamento;
 import br.com.park.job.Servicos;
 import br.com.park.job.TabelaPreco;
 import br.com.park.job.Ticket;
 import br.com.park.logs.Logs;
+import java.awt.Choice;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-
 public class bdBack {
-   
+    TBdao bancoTi;
     private static ArrayList<Ticket> bdTicket = new ArrayList();
     private static ArrayList<Estacionamento> bdEstacionamento = new ArrayList();
-    private static ArrayList<Servicos> bdServico = new ArrayList();
+    
     private static ArrayList<Caixa> bdConvenio = new ArrayList();
     private static ArrayList<TabelaPreco> bdTabPreco = new ArrayList();
     private static ArrayList<Logs> bdlog = new ArrayList();
+    private static ArrayList<Cliente> bdCliente = new ArrayList<>();
 
-  //  <---------------------------    >>>>>>>>
-     public void salvaEstacionamento(Estacionamento Estacionamento) {
+    //  <---------------------------    >>>>>>>>
+    public void salvaCliente(Cliente cliente) {
+        bdCliente.add(cliente);
+        bdTicket.add(cliente.getPasse());
+    }
+
+    public void salvaEstacionamento(Estacionamento Estacionamento) {
         bdEstacionamento.add(Estacionamento);
     }
 
-    public void salvaServico(Servicos serv) {
-       bdServico.add(serv);     
-       System.out.println("ArrayServicos "+ bdServico.size());
- 
-    }
+    
 
     public void salvaConvenio(Caixa convenio) {
         bdConvenio.add(convenio);
@@ -36,40 +43,24 @@ public class bdBack {
 
     public void salvaTbPreco(TabelaPreco TabelaPreco) {
         bdTabPreco.add(TabelaPreco);
-        
-        System.out.println("Array TB preço: "+bdTabPreco.size());
     }
 
     public void salvaTicket(Ticket ticket) {
+         bancoTi = new TBdao();
         bdTicket.add(ticket);
-        System.out.println("Ticket Salvo " + bdTicket.size()+"\n"+ticket.getId());
+       /* try {
+            bancoTi.create(ticket);
+        } catch (SQLException ex) {
+            Logger.getLogger(bdBack.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 
-    public String consultaTicket(double ticket) {
-        int passe = 0;
-        double numero;
-       
-        for (int i = 0; i < bdTicket.size(); i++) {
-            numero = bdTicket.get(i).getCodigo();
-            if (ticket == numero) {
-                passe = bdTicket.get(i).getId();
-            }
-        }
+   
 
-      
-        return bdTicket.get(passe).toString();
-        
-    }
-    public void salvaLog(Logs log){
+    public void salvaLog(Logs log) {
         bdlog.add(log);
     }
-    
-    
-    
-    
-    
-    
-    
+
     public static ArrayList<Logs> getBdlog() {
         return bdlog;
     }
@@ -77,6 +68,7 @@ public class bdBack {
     public static void setBdlog(ArrayList<Logs> bdlog) {
         bdBack.bdlog = bdlog;
     }
+
     public ArrayList<Ticket> getBdTicket() {
         return bdTicket;
     }
@@ -92,15 +84,6 @@ public class bdBack {
     public void setBdEstacionamento(ArrayList<Estacionamento> bdEstacionamento) {
         this.bdEstacionamento = bdEstacionamento;
     }
-
-    public ArrayList<Servicos> getBdServico() {
-        return bdServico;
-    }
-
-    public void setBdServico(ArrayList<Servicos> bdServico) {
-        this.bdServico = bdServico;
-    }
-
     public ArrayList<Caixa> getBdConvenio() {
         return bdConvenio;
     }
@@ -115,5 +98,27 @@ public class bdBack {
 
     public void setBdTabPreco(ArrayList<TabelaPreco> bdTabPreco) {
         this.bdTabPreco = bdTabPreco;
+    }
+
+    public static ArrayList<Cliente> getBdCliente() {
+        return bdCliente;
+    }
+
+    public static void setBdCliente(ArrayList<Cliente> bdCliente) {
+        bdBack.bdCliente = bdCliente;
+    }
+
+    //---------------------------------------------------------
+   
+
+    public void popCombConvenio(JComboBox cb) {
+        cb.removeAll();
+        if (getBdConvenio().isEmpty()) {
+            cb.addItem("Não possui");
+        } else {
+            for (Caixa convenio : bdConvenio) {
+                cb.addItem(convenio.getConvenioNome());
+            }
+        }
     }
 }
