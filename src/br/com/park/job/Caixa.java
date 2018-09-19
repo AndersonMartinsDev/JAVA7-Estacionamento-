@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
+import br.com.park.job.Ticket;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -70,11 +71,32 @@ public class Caixa {
             }
         }
     }
+    /**
+    public float gerarReceita(Ticket ticket) {
+        float receita = 0;
+        Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
+        Instant d1 = ticket.getSaida().toInstant();
+        Instant d3 = c.getTime().toInstant();
+        int ns = (int) Duration.between(d3, d1).toMinutes();
+        // Metodo para Mostrar o status 
+        
+        for (int i = 0; i < banco.getBdTabPreco().size(); i++) {
+            if (-ns >= banco.getBdTabPreco().get(i).getTempo()) {
+                receita = banco.getBdTabPreco().get(i).getMoeda();
+                /*Deve-se pegar o ticket e atualizar o valor de acordo com o tempo
+                setando no setValor() do ticket. isso será setado no retorno
+                
+                *//*
+            }
+        }
+        return receita;
+    }*/
+    
     public void attReceita(){
         banco = new bdBack();
         for (int i = 0; i < banco.getBdTicket().size(); i++) {
             gerarReceita(banco.getBdTicket().get(i));
         }
     }
-
 }
+

@@ -94,41 +94,8 @@ public class testeDeCoisas {
         }
          
          Period period = Period.between(LocalDate.MIN, LocalDate.MAX);
-         System.out.println(period.getDays());
-        Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
-        bdBack bd = new bdBack();
-
-        TabelaPreco tb1 = new TabelaPreco();
-        tb1.setMoeda(4);
-        tb1.setTempo(40);
-        bd.salvaTbPreco(tb1);
-        TabelaPreco tb2 = new TabelaPreco();
-        tb2.setMoeda(8);
-        tb2.setTempo(80);
-        bd.salvaTbPreco(tb2);
-        TabelaPreco tb3 = new TabelaPreco();
-        tb3.setMoeda(12);
-        tb3.setTempo(120);
-        bd.salvaTbPreco(tb3);
+         System.out.println(period.getDays());*/
         
-
-        Caixa cx = new Caixa();
-
-        Ticket passe = new Ticket();
-
-        passe.setCodigo(105202);
-        passe.setaHora(8, 40, 00);
-        passe.setaHoraSaida(40);
-        
-        Instant d1 = passe.getSaida().toInstant();
-        Instant d2 = passe.getEntrada().toInstant();
-        Instant d3 = c.getTime().toInstant();
-
-        double ns = (double) Duration.between(d2, d3).toMinutes();
-       
-
-        double tempoDuracao = (double) Duration.between(d2, d3).toMinutes();
-
         
         /*Aqui verifica se a hora de saida está depois da hora atual.
          Se estiver não cobrar 
@@ -150,21 +117,8 @@ public class testeDeCoisas {
          */
     
          
-//Acaba auqi 
-        String dateStr = "Fri Aug 24 19:19:22 BRT 2018";
-        Locale loc = new Locale("pr", "BR");
-        DateFormat readFormat = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy",loc);
-        DateFormat writeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = readFormat.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String formattedDate = "";
-        if (date != null) {
-            formattedDate = writeFormat.format(date);
-        }
-        System.out.println(formattedDate);
-    }
-}
+         
+         // Metodo para Mostrar o status 
+    
+        
+}}
