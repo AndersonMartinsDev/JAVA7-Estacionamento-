@@ -5,6 +5,7 @@
  */
 package br.com.park.job;
 
+import br.com.park.dtbase.TBdao;
 import br.com.park.dtbase.bdBack;
 import java.time.Duration;
 import java.time.Instant;
@@ -20,7 +21,7 @@ public class Caixa {
     private Integer id;
     private String convenioNome;
     private float desconto;
-    private bdBack banco;
+    private TBdao banco;
 
     public Caixa() {
         this.id = inc++;
@@ -52,51 +53,36 @@ public class Caixa {
     }
 
     public void gerarReceita(Ticket ticket) {
-        banco = new bdBack();
+        banco = new TBdao();
         float valor;
         Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
         Instant d1 = ticket.getSaida().toInstant();
         Instant d2 = ticket.getEntrada().toInstant();
         Instant d3 = c.getTime().toInstant();
-        double tempoDuracao = (double) Duration.between(d2, d3).toMinutes();
+        int tempoDuracao = (int) Duration.between(d2, d3).toMinutes();
+        System.err.println("Chegou aqui assim\n"+ d1.toString() + " \n"+ d2.toString()+ " \n"+ d3.toString());
+        
         if (d1.isAfter(d3)) {
             valor = 0;
             ticket.setValor(valor);
+            System.err.println("Ta liberado");
         } else {
-            for (int i = 0; i < banco.getBdTabPreco().size(); i++) {
-                if (tempoDuracao >= banco.getBdTabPreco().get(i).getTempo()) {   
-                  valor = banco.getBdTabPreco().get(i).getMoeda();
-                  ticket.setValor(valor);
+            for (int i = 0; i < banco.getTb().size(); i++) {
+                if (tempoDuracao >= banco.getTb().get(i).getTempo()) {
+                    valor = banco.getTb().get(i).getMoeda();
+                    ticket.setValor(valor);
+
                 }
+
+                System.err.println(" nâo Ta liberado");
             }
         }
     }
     /**
-    public float gerarReceita(Ticket ticket) {
-        float receita = 0;
-        Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
-        Instant d1 = ticket.getSaida().toInstant();
-        Instant d3 = c.getTime().toInstant();
-        int ns = (int) Duration.between(d3, d1).toMinutes();
-        // Metodo para Mostrar o status 
-        
-        for (int i = 0; i < banco.getBdTabPreco().size(); i++) {
-            if (-ns >= banco.getBdTabPreco().get(i).getTempo()) {
-                receita = banco.getBdTabPreco().get(i).getMoeda();
-                /*Deve-se pegar o ticket e atualizar o valor de acordo com o tempo
-                setando no setValor() do ticket. isso será setado no retorno
-                
-                *//*
-            }
-        }
-        return receita;
-    }*/
-    
-    public void attReceita(){
-        banco = new bdBack();
-        for (int i = 0; i < banco.getBdTicket().size(); i++) {
-            gerarReceita(banco.getBdTicket().get(i));
-        }
+     *
+     * public void attReceita(){ banco = new bdBack(); for (int i = 0; i <
+     * banco.getBdTicket().size(); i++) {
+     * gerarReceita(banco.getBdTicket().get(i)); }
     }
+     */
 }
-

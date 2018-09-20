@@ -220,17 +220,12 @@ public class PrincipalPage extends JPanel {
     }
 
     public void geraTicket() {
+        
         DateFormat forma = DateFormat.getDateInstance();
         DateFormat forma1 = DateFormat.getTimeInstance();
         String servicoNome = cb_serv.getSelectedItem().toString();
-        Caixa cx = new Caixa();
-        Ticket passe = new Ticket();
-        passe.setaHoraAtual();
-        //Setar o serviço padrão através da clas CtrlGeral substituir no "servicoNome"
-        passe.setaHoraSaida(qualServico(servicoNome));
-        passe.setServ(servicoNome);
-        System.err.println(passe.getServ());
-        lb_codigo.setText(String.valueOf(passe.gerarCodigo()));
+        Ticket passe = new Ticket().gerarTicket(servicoNome, qualServico(servicoNome));
+        lb_codigo.setText(String.valueOf(passe.getCodigo()));
         lb_dataEntrada.setText(String.valueOf(forma.format(passe.getEntrada())));
         lb_HoraEntrada.setText(String.valueOf(forma1.format(passe.getEntrada())));
         lb_dataSaida.setText(String.valueOf(forma.format(passe.getSaida())));

@@ -16,6 +16,12 @@ import javax.swing.JOptionPane;
 
 public class TBdao {
 
+    private static ArrayList<TabelaPreco> tb = new ArrayList();
+
+    public ArrayList<TabelaPreco> getTb() {
+        return tb;
+    }
+
     public void create(TabelaPreco tb) throws SQLException {
         Connection conexao = ConnectionFactory.getConnection();
         String sql = "INSERT INTO tabelapreco (tempo,moeda)VALUES(?,?)";
@@ -32,23 +38,23 @@ public class TBdao {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    public List<TabelaPreco> bdtoArray()throws SQLException{
+
+    public List<TabelaPreco> bdtoArray() throws SQLException {
         Connection conexao = ConnectionFactory.getConnection();
         PreparedStatement stmt = conexao.prepareStatement("select * from tabelapreco");
         ResultSet rs = stmt.executeQuery();
-        ArrayList <TabelaPreco> tb = new ArrayList();
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 TabelaPreco t = new TabelaPreco();
                 t.setId(rs.getInt("ID"));
                 t.setTempo(rs.getDouble("tempo"));
                 t.setMoeda(rs.getFloat("moeda"));
-           
-               tb.add(t);
+
+                tb.add(t);
             }
         } catch (Exception e) {
             System.err.println("POP ARRAY" + e);
-        }finally {
+        } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
         return tb;

@@ -1,6 +1,7 @@
 package br.com.park.job;
 
 import java.awt.Color;
+import java.text.DateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.Temporal;
@@ -159,6 +160,16 @@ public class Ticket {
         setData.set(Calendar.MINUTE, minuto);
         return setData.getTime();
     }
+    public Ticket gerarTicket(String servicoNome, int tolerancia){
+       
+        Ticket passe = new Ticket();
+        passe.gerarCodigo();
+        passe.setaHoraAtual();
+        passe.setaHoraSaida(tolerancia);
+        passe.setServ(servicoNome);
+        
+           return passe;
+       }
 
     public String toString() {
         String tx;
