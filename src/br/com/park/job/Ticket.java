@@ -1,10 +1,8 @@
 package br.com.park.job;
 
 import java.awt.Color;
-import java.text.DateFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -97,20 +95,17 @@ public class Ticket {
         
             Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
             Instant d1 = getSaida().toInstant();
-            Instant d2 = this.getEntrada().toInstant();
             Instant d3 = c.getTime().toInstant();
 
             double ns = (double) Duration.between(d3, d1).toMinutes();
-            double tempoDuracao = (double) Duration.between(d2, d3).toMinutes();
-
+            
             if (ns == 0) {
                 j1.setForeground(Color.blue);
                 return "Seu tempo esgotou: " + (int) ns;
-            } else if (true) {
-                //d1.isAfter(d3)
+            } else if (d1.isAfter(d3)) {
+               
                 j1.setForeground(Color.magenta);
                 return "Liberado → " + (int) ns + " Minutos";
-
             } else {
                 j1.setForeground(Color.red);
                 return "Excedeu: " + (int) -ns + " Minutos";

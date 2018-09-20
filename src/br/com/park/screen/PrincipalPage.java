@@ -246,7 +246,7 @@ public class PrincipalPage extends JPanel {
         DateFormat padrao2 = DateFormat.getDateTimeInstance();
         lb_codigoConsulta.setText(String.valueOf((int) passe.getCodigo()));
         lb_validade.setText(String.valueOf(padrao2.format(passe.getSaida())));
-        lb_cobrar.setText("R$ " + String.valueOf(passe.getValor()));
+        lb_cobrar.setText("R$ " + String.valueOf(passe.getValor())+"0");
         lb_status.setText(passe.buscaStatus(lb_status));
     }
 

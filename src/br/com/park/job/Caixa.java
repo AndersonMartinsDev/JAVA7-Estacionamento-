@@ -6,14 +6,18 @@
 package br.com.park.job;
 
 import br.com.park.dtbase.TBdao;
-import br.com.park.dtbase.bdBack;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
-import br.com.park.job.Ticket;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import org.jfree.data.time.SimpleTimePeriod;
 
 public class Caixa {
 
@@ -21,6 +25,14 @@ public class Caixa {
     private Integer id;
     private String convenioNome;
     private float desconto;
+    private float valorEntrada;/*Aqui ficará o valor que o operador 
+                    entrará no caixa, que pode ser escolhido digitar ao entrar
+                    ou o caixa pegará o valor do dia anterior
+    */
+    private float valorAcumulado;/*
+                Aqui ficar o valor de lucro do caixa do dia que é igual o valor de entrada de hoje - o de ontem
+   
+    */
     private TBdao banco;
 
     public Caixa() {
@@ -52,37 +64,28 @@ public class Caixa {
         this.desconto = desconto;
     }
 
-    public void gerarReceita(Ticket ticket) {
+    public void gerarReceita(Ticket ticket) throws SQLException { //isso funciona
         banco = new TBdao();
         float valor;
         Calendar c = GregorianCalendar.getInstance(Locale.ROOT);
+        
         Instant d1 = ticket.getSaida().toInstant();
         Instant d2 = ticket.getEntrada().toInstant();
         Instant d3 = c.getTime().toInstant();
-        int tempoDuracao = (int) Duration.between(d2, d3).toMinutes();
-        System.err.println("Chegou aqui assim\n"+ d1.toString() + " \n"+ d2.toString()+ " \n"+ d3.toString());
-        
+        double tempoDuracao = Duration.between(d2, d3).toMinutes();
+  
         if (d1.isAfter(d3)) {
             valor = 0;
             ticket.setValor(valor);
             System.err.println("Ta liberado");
         } else {
-            for (int i = 0; i < banco.getTb().size(); i++) {
-                if (tempoDuracao >= banco.getTb().get(i).getTempo()) {
-                    valor = banco.getTb().get(i).getMoeda();
+           System.err.println(" nâo Ta liberado");
+            for (TabelaPreco tb : banco.getTb()) {
+                if (tempoDuracao >= tb.getTempo()) {
+                    valor = tb.getMoeda();
                     ticket.setValor(valor);
-
                 }
-
-                System.err.println(" nâo Ta liberado");
             }
         }
     }
-    /**
-     *
-     * public void attReceita(){ banco = new bdBack(); for (int i = 0; i <
-     * banco.getBdTicket().size(); i++) {
-     * gerarReceita(banco.getBdTicket().get(i)); }
-    }
-     */
 }
